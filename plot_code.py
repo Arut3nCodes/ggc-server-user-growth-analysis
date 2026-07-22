@@ -206,6 +206,12 @@ def plot_user_net_daily(user_net_list):
 
 def plot_user_net_weekly(user_net_list):
     fig, ax = plt.subplots(figsize=(20, 5))  # Create a figure and axis for the plot
+    
+    ax.set_title( # Plot title with custom font properties
+        label='Weekly User Net Change', # plot title
+        fontsize=16,
+        fontweight='bold'
+        ) 
 
     ax.bar(
         label='Users gained',
@@ -236,12 +242,6 @@ def plot_user_net_weekly(user_net_list):
         where='mid',
         )
 
-    ax.set_title( # Plot title with custom font properties
-        label='Daily User Net Change', # plot title
-        fontsize=16,
-        fontweight='bold'
-        ) 
-
     ax.set_xlabel( # Label the x-axis
         xlabel='Date',
         fontsize=12,
@@ -263,4 +263,56 @@ def plot_user_net_weekly(user_net_list):
     ax.legend()
     ax.set_xticklabels(user_net_list['timestamp'].dt.strftime('%d %b'))
     ax.tick_params(axis='x', rotation=45) # Rotate x-tick labels for better readability
+    plt.show()  # Show the plot of user growth over time
+    
+def plot_total_users_daily(user_total_list):
+    fig, ax = plt.subplots(figsize=(10, 5))  # Create a figure and axis for the plot
+
+    ax.plot( # Plot total users over time
+        user_total_list['timestamp'],
+        user_total_list['total_users'],
+        linewidth=3,
+        marker='o',
+        markersize=6, 
+        markevery=7,
+        markeredgecolor='darkblue',
+            )  
+
+    ax.set_title( # Plot title with custom font properties
+        label='Total user growth over time', # plot title
+        fontsize=16,
+        fontweight='bold'
+        )
+
+    ax.set_xlabel( # Label the x-axis
+        xlabel='Date',
+        fontsize=12,
+        fontweight='bold'
+        )  
+
+    ax.set_ylabel( # Label the y-axis
+        ylabel='Number of Users',
+        fontsize=12,
+        fontweight='bold'
+        )  
+
+    # Add value labels every 7 points
+    for i in range(0, len(user_total_list), 7):
+        ax.annotate(
+            f"{user_total_list['total_users'].iloc[i]:,}",
+            (
+                user_total_list['timestamp'].iloc[i],
+                user_total_list['total_users'].iloc[i]
+            ),
+            textcoords="offset points",
+            xytext=(0, 10),
+            ha='center',
+            fontsize=9
+        )
+
+    ax.set_xticks(user_total_list['timestamp'][::7]) # set x-ticks to every 7th date for better readability
+    ax.tick_params(axis='x', rotation=45) # Rotate x-tick labels for better readability
+
+    ax.set_ylabel('Number of Users')  # Label the y-axis
+
     plt.show()  # Show the plot of user growth over time
